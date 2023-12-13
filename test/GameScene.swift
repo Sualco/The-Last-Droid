@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AVFoundation
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -17,12 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var bigAndroid : SKSpriteNode!
     let scoreLabel = SKLabelNode(fontNamed: "PressStart2P")
     var score = 0
-<<<<<<< Updated upstream
     var lastScore: Int = 0
-=======
-    var audioPlayer: AVAudioPlayer?
-
->>>>>>> Stashed changes
     
     struct PhysicsCategory {
         static let Android: UInt32 = 1
@@ -34,12 +28,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         scoreLabel.text = "Score: \(score)"
-        scoreLabel.fontSize = 13
-        scoreLabel.position = CGPoint(x: UIScreen.main.bounds.maxX - 100, y: UIScreen.main.bounds.maxY - 100)
+        scoreLabel.fontSize = 20
+        scoreLabel.position = CGPoint(x: UIScreen.main.bounds.maxX - 100, y: UIScreen.main.bounds.maxY - 95)
         addChild(scoreLabel)
         
-        lifeLabel.text = "Life Points: \(humanLifePoints)"
-        lifeLabel.fontSize = 13
+        lifeLabel.text = "Life Points : \(humanLifePoints)"
+        lifeLabel.fontSize = 20
         lifeLabel.position = CGPoint(x: UIScreen.main.bounds.minX + 100, y: UIScreen.main.bounds.minY + 750)
         addChild(lifeLabel)
         print ("game loaded")
@@ -51,27 +45,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.physicsWorld.contactDelegate = self
         
-<<<<<<< Updated upstream
         generateBigAndroid()
-=======
-        let soundHumanBullet = Bundle.main.url(forResource: "apple", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
-               do {
-                   try audioPlayer = AVAudioPlayer(contentsOf: soundHumanBullet!)
-                   audioPlayer?.prepareToPlay()
-               } catch {
-                   print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
-               }
-        
-        let soundAndroidBullet = Bundle.main.url(forResource: "laser android", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
-               do {
-                   try audioPlayer = AVAudioPlayer(contentsOf: soundAndroidBullet!)
-                   audioPlayer?.prepareToPlay()
-               } catch {
-                   print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
-               }
-        
-        //generateBigAndroid()
->>>>>>> Stashed changes
         
         generateAndroids()
         
@@ -263,7 +237,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let sequenceOfActions = SKAction.sequence([moveUp,wait, delete])
 
         aBullet.run(sequenceOfActions)
-        audioPlayer?.play()
         
     }
     
@@ -322,7 +295,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sequenceOfActions = SKAction.sequence([moveUp,delete])
         
         bullet.run(sequenceOfActions)
-        audioPlayer?.play()
     }
     
    
