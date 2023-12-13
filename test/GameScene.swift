@@ -16,6 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var bigAndroid : SKSpriteNode!
     let scoreLabel = SKLabelNode(fontNamed: "Helvetica")
     var score = 0
+    var lastScore: Int = 0
     
     struct PhysicsCategory {
         static let Android: UInt32 = 1
@@ -44,7 +45,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.physicsWorld.contactDelegate = self
         
-        //generateBigAndroid()
+        generateBigAndroid()
         
         generateAndroids()
         
@@ -52,7 +53,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         respawnAndroid()
         
+        respawnBigAndroid()
         
+        
+    }
+    func respawnBigAndroid () {
+        let respawnDelay = TimeInterval(CGFloat(2))
+        run(SKAction.sequence([SKAction.wait(forDuration: respawnDelay), SKAction.run {
+            
+            self.generateBigAndroid ()
+            self.respawnBigAndroid()
+        }]))
     }
     
     func respawnAndroid() {
@@ -63,28 +74,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }]))
         }
     
-   /* func generateBigAndroid () {
+   func generateBigAndroid () {
         
-        //bigAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize1, delay: randomDelay)
-       
-    if score > 0 && score % 100 == 0 {
-        let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
-        let randomY = CGFloat(700)
-        let noRandomSize1 = CGSize(width: CGFloat(100), height: CGFloat(100))
-        let randomDelay = TimeInterval(1)
-        bigAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize1, delay: randomDelay)
+       let thresold = 100
+       let currentScore = (score / thresold)
+        
+        
+     if currentScore > lastScore {
+         let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
+         let randomY = CGFloat(700)
+         let noRandomSize1 = CGSize(width: CGFloat(70), height: CGFloat(70))
+         let randomDelay = TimeInterval(1)
+         bigAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize1, delay: randomDelay)
+         lastScore = currentScore
+         print ("generato")
+     }
     }
-    }*/
     
     func generateAndroids () {
-        
-        if score > 0 && score % 100 == 0 {
-            let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
-            let randomY = CGFloat(700)
-            let noRandomSize1 = CGSize(width: CGFloat(100), height: CGFloat(100))
-            let randomDelay = TimeInterval(1)
-            bigAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize1, delay: randomDelay)
-        }
         
         for _ in 1...2 {
                 let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
