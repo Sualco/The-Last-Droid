@@ -12,7 +12,7 @@
 		0C04876B2B24C6AC00B2F6CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C04876A2B24C6AC00B2F6CF /* Assets.xcassets */; };
 		0C04876E2B24C6AC00B2F6CF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C04876D2B24C6AC00B2F6CF /* Preview Assets.xcassets */; };
 		0C0487772B24C85100B2F6CF /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0487762B24C85100B2F6CF /* GameScene.swift */; };
-		0C4EA1BE2B28B1C600D1FF31 /* PressStart2P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C4EA1BD2B28B1C600D1FF31 /* PressStart2P.ttf */; };
+		6F49B29E2B2A164100F9EF6B /* PressStart2P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +23,7 @@
 		0C04876D2B24C6AC00B2F6CF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0C0487762B24C85100B2F6CF /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		0C4EA1BC2B28B16800D1FF31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		0C4EA1BD2B28B1C600D1FF31 /* PressStart2P.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = PressStart2P.ttf; path = ../../Downloads/PressStart2P.ttf; sourceTree = "<group>"; };
+		6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = PressStart2P.ttf; path = ../../../Projects/assets/TheLastAndroidAssets/PressStart2P.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,7 +40,6 @@
 		0C04875A2B24C6AB00B2F6CF = {
 			isa = PBXGroup;
 			children = (
-				0C4EA1BD2B28B1C600D1FF31 /* PressStart2P.ttf */,
 				0C0487652B24C6AB00B2F6CF /* test */,
 				0C0487642B24C6AB00B2F6CF /* Products */,
 			);
@@ -61,6 +60,7 @@
 				0C0487662B24C6AB00B2F6CF /* testApp.swift */,
 				0C0487682B24C6AB00B2F6CF /* ContentView.swift */,
 				0C0487762B24C85100B2F6CF /* GameScene.swift */,
+				6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */,
 				0C04876A2B24C6AC00B2F6CF /* Assets.xcassets */,
 				0C04876C2B24C6AC00B2F6CF /* Preview Content */,
 			);
@@ -133,7 +133,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C4EA1BE2B28B1C600D1FF31 /* PressStart2P.ttf in Resources */,
+				6F49B29E2B2A164100F9EF6B /* PressStart2P.ttf in Resources */,
 				0C04876E2B24C6AC00B2F6CF /* Preview Assets.xcassets in Resources */,
 				0C04876B2B24C6AC00B2F6CF /* Assets.xcassets in Resources */,
 			);

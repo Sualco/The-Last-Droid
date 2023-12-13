@@ -11,10 +11,10 @@ import SpriteKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var numberOfHits = 0
     var humanLifePoints = 60
-    let lifeLabel = SKLabelNode (fontNamed: "Helvetica")
+    let lifeLabel = SKLabelNode (fontNamed: "PressStart2P")
     var human: SKSpriteNode!
     var bigAndroid : SKSpriteNode!
-    let scoreLabel = SKLabelNode(fontNamed: "Helvetica")
+    let scoreLabel = SKLabelNode(fontNamed: "PressStart2P")
     var score = 0
     var lastScore: Int = 0
     
