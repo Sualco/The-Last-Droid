@@ -12,7 +12,13 @@
 		0C04876B2B24C6AC00B2F6CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C04876A2B24C6AC00B2F6CF /* Assets.xcassets */; };
 		0C04876E2B24C6AC00B2F6CF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C04876D2B24C6AC00B2F6CF /* Preview Assets.xcassets */; };
 		0C0487772B24C85100B2F6CF /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0487762B24C85100B2F6CF /* GameScene.swift */; };
+<<<<<<< Updated upstream
 		6F49B29E2B2A164100F9EF6B /* PressStart2P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */; };
+=======
+		B30ED6932B2A08CD00FDB6A4 /* apple.wav in Resources */ = {isa = PBXBuildFile; fileRef = B30ED6922B2A08CD00FDB6A4 /* apple.wav */; };
+		B30ED6952B2A158D00FDB6A4 /* laser android.wav in Resources */ = {isa = PBXBuildFile; fileRef = B30ED6942B2A158D00FDB6A4 /* laser android.wav */; };
+		B3DB684A2B29277000C26D58 /* PressStart2P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B3DB68492B29277000C26D58 /* PressStart2P.ttf */; };
+>>>>>>> Stashed changes
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +29,13 @@
 		0C04876D2B24C6AC00B2F6CF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0C0487762B24C85100B2F6CF /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		0C4EA1BC2B28B16800D1FF31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+<<<<<<< Updated upstream
 		6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = PressStart2P.ttf; path = ../../../Projects/assets/TheLastAndroidAssets/PressStart2P.ttf; sourceTree = "<group>"; };
+=======
+		B30ED6922B2A08CD00FDB6A4 /* apple.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = apple.wav; sourceTree = "<group>"; };
+		B30ED6942B2A158D00FDB6A4 /* laser android.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "laser android.wav"; sourceTree = "<group>"; };
+		B3DB68492B29277000C26D58 /* PressStart2P.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PressStart2P.ttf; sourceTree = "<group>"; };
+>>>>>>> Stashed changes
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +74,8 @@
 				0C0487762B24C85100B2F6CF /* GameScene.swift */,
 				6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */,
 				0C04876A2B24C6AC00B2F6CF /* Assets.xcassets */,
+				B30ED6912B2A08B100FDB6A4 /* Effects */,
+				B3DB684B2B29278F00C26D58 /* Fonts */,
 				0C04876C2B24C6AC00B2F6CF /* Preview Content */,
 			);
 			path = test;
@@ -73,6 +87,23 @@
 				0C04876D2B24C6AC00B2F6CF /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B30ED6912B2A08B100FDB6A4 /* Effects */ = {
+			isa = PBXGroup;
+			children = (
+				B30ED6922B2A08CD00FDB6A4 /* apple.wav */,
+				B30ED6942B2A158D00FDB6A4 /* laser android.wav */,
+			);
+			path = Effects;
+			sourceTree = "<group>";
+		};
+		B3DB684B2B29278F00C26D58 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				B3DB68492B29277000C26D58 /* PressStart2P.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,9 +164,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< Updated upstream
 				6F49B29E2B2A164100F9EF6B /* PressStart2P.ttf in Resources */,
+=======
+				B3DB684A2B29277000C26D58 /* PressStart2P.ttf in Resources */,
+>>>>>>> Stashed changes
 				0C04876E2B24C6AC00B2F6CF /* Preview Assets.xcassets in Resources */,
+				B30ED6952B2A158D00FDB6A4 /* laser android.wav in Resources */,
 				0C04876B2B24C6AC00B2F6CF /* Assets.xcassets in Resources */,
+				B30ED6932B2A08CD00FDB6A4 /* apple.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
