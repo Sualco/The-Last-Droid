@@ -17,17 +17,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var human: SKSpriteNode!
     var score = 0
     var lastScore: Int = 0
-<<<<<<< Updated upstream
     let scoreLabel = SKLabelNode(fontNamed: "PressStart2P")
     var bigAndroids : [SKSpriteNode] = []
 
    
-=======
     var backgroundMusic: AVAudioPlayer?
     var bulletHumanSound: AVAudioPlayer?
     var bulletAndroidSound: AVAudioPlayer?
     var bulletBossSound: AVAudioPlayer?
->>>>>>> Stashed changes
     
     struct PhysicsCategory {
         static let Android: UInt32 = 1
@@ -96,14 +93,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
                 }
         
-//        let bulletBossSoundURL = Bundle.main.url(forResource: "BossLaser", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
-//                do {
-//                    try bulletBossSound = AVAudioPlayer(contentsOf: bulletBossSoundURL!)
-//                    bulletBossSound?.volume = 0.1
-//                    bulletBossSound?.prepareToPlay()
-//                } catch {
-//                    print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
-//                }
+        let bulletBossSoundURL = Bundle.main.url(forResource: "BossLaser", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
+                do {
+                    try bulletBossSound = AVAudioPlayer(contentsOf: bulletBossSoundURL!)
+                    bulletBossSound?.volume = 0.1
+                    bulletBossSound?.prepareToPlay()
+                } catch {
+                    print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
+                }
 //        creare prima funzione bullet big android
         
         
@@ -178,7 +175,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func bigAndroid ( pos: CGPoint, size: CGSize, delay: TimeInterval) -> SKSpriteNode {
+    func bigAndroid (pos: CGPoint, size: CGSize, delay: TimeInterval) -> SKSpriteNode {
         let bigAndroidTexture = SKTexture(imageNamed: "bigandroid")
         let newbigAndroid = SKSpriteNode(texture: bigAndroidTexture,size: size)
         
@@ -214,12 +211,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let shootAndWaitAndroid = SKAction.sequence([SKAction.wait(forDuration: 2.0),fireActionBigAndroid])
             let repeatAndroidShooting = SKAction.repeatForever(shootAndWaitAndroid)
             run(repeatAndroidShooting)
-<<<<<<< Updated upstream
         return newbigAndroid
-=======
-        self.addChild(bigAndroid)
+//        self.addChild(bigAndroid)
         
->>>>>>> Stashed changes
     }
     
     
@@ -295,6 +289,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sequenceOfActions = SKAction.sequence([moveUp,wait, delete])
 
     bigBullet.run(sequenceOfActions)
+        bulletBossSound?.play()
     }
     
     func androidBullet(textureName: String, position: CGPoint) {
