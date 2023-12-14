@@ -8,6 +8,7 @@
 
 import Foundation
 import SpriteKit
+import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var numberOfHits = 0
@@ -16,10 +17,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var human: SKSpriteNode!
     var score = 0
     var lastScore: Int = 0
+<<<<<<< Updated upstream
     let scoreLabel = SKLabelNode(fontNamed: "PressStart2P")
     var bigAndroids : [SKSpriteNode] = []
 
    
+=======
+    var backgroundMusic: AVAudioPlayer?
+    var bulletHumanSound: AVAudioPlayer?
+    var bulletAndroidSound: AVAudioPlayer?
+    var bulletBossSound: AVAudioPlayer?
+>>>>>>> Stashed changes
     
     struct PhysicsCategory {
         static let Android: UInt32 = 1
@@ -32,12 +40,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         scoreLabel.text = "Score: \(score)"
-        scoreLabel.fontSize = 20
-        scoreLabel.position = CGPoint(x: UIScreen.main.bounds.maxX - 100, y: UIScreen.main.bounds.maxY - 95)
+        scoreLabel.fontSize = 13
+        scoreLabel.position = CGPoint(x: UIScreen.main.bounds.maxX - 100, y: UIScreen.main.bounds.maxY - 100)
         addChild(scoreLabel)
         
-        lifeLabel.text = "Life Points : \(humanLifePoints)"
-        lifeLabel.fontSize = 20
+        lifeLabel.text = "Life Points: \(humanLifePoints)"
+        lifeLabel.fontSize = 13
         lifeLabel.position = CGPoint(x: UIScreen.main.bounds.minX + 100, y: UIScreen.main.bounds.minY + 750)
         addChild(lifeLabel)
         print ("game loaded")
@@ -59,13 +67,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         respawnBigAndroid()
         
+        if let backgroundSoundURL = Bundle.main.url(forResource: "BackgroundEffect", withExtension: "wav") {
+                   do {
+                       backgroundMusic = try AVAudioPlayer(contentsOf: backgroundSoundURL)
+                       backgroundMusic?.numberOfLoops = -1 // Riproduzione in loop infinito
+                       backgroundMusic?.volume = 0.1
+                       backgroundMusic?.play()
+                   } catch {
+                       print("Errore durante il caricamento del suono di background: \(error.localizedDescription)")
+                   }
+               }
+        
+        let bulletHumanSoundURL = Bundle.main.url(forResource: "AppleBullet", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
+                do {
+                    try bulletHumanSound = AVAudioPlayer(contentsOf: bulletHumanSoundURL!)
+                    bulletHumanSound?.volume = 0.8
+                    bulletHumanSound?.prepareToPlay()
+                } catch {
+                    print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
+                }
+        
+        let bulletAndroidSoundURL = Bundle.main.url(forResource: "AndroidLaser", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
+                do {
+                    try bulletAndroidSound = AVAudioPlayer(contentsOf: bulletAndroidSoundURL!)
+                    bulletAndroidSound?.volume = 0.1
+                    bulletAndroidSound?.prepareToPlay()
+                } catch {
+                    print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
+                }
+        
+//        let bulletBossSoundURL = Bundle.main.url(forResource: "BossLaser", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
+//                do {
+//                    try bulletBossSound = AVAudioPlayer(contentsOf: bulletBossSoundURL!)
+//                    bulletBossSound?.volume = 0.1
+//                    bulletBossSound?.prepareToPlay()
+//                } catch {
+//                    print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
+//                }
+//        creare prima funzione bullet big android
+        
+        
         
     }
     func respawnBigAndroid () {
         let respawnDelay = TimeInterval(CGFloat(2))
         run(SKAction.sequence([SKAction.wait(forDuration: respawnDelay), SKAction.run {
             
-            self.generateBigAndroid ()
+            self.generateBigAndroid()
             self.respawnBigAndroid()
         }]))
     }
@@ -166,7 +214,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let shootAndWaitAndroid = SKAction.sequence([SKAction.wait(forDuration: 2.0),fireActionBigAndroid])
             let repeatAndroidShooting = SKAction.repeatForever(shootAndWaitAndroid)
             run(repeatAndroidShooting)
+<<<<<<< Updated upstream
         return newbigAndroid
+=======
+        self.addChild(bigAndroid)
+        
+>>>>>>> Stashed changes
     }
     
     
@@ -270,6 +323,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let sequenceOfActions = SKAction.sequence([moveUp,wait, delete])
 
         aBullet.run(sequenceOfActions)
+        bulletAndroidSound?.play()
         
     }
     
@@ -328,6 +382,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sequenceOfActions = SKAction.sequence([moveUp,delete])
         
         bullet.run(sequenceOfActions)
+        bulletHumanSound?.play()
     }
     
    

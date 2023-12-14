@@ -12,7 +12,11 @@
 		0C04876B2B24C6AC00B2F6CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C04876A2B24C6AC00B2F6CF /* Assets.xcassets */; };
 		0C04876E2B24C6AC00B2F6CF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C04876D2B24C6AC00B2F6CF /* Preview Assets.xcassets */; };
 		0C0487772B24C85100B2F6CF /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0487762B24C85100B2F6CF /* GameScene.swift */; };
-		6F49B29E2B2A164100F9EF6B /* PressStart2P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */; };
+		B30D0BB52B2A50D8005D9EA6 /* AppleBullet.wav in Resources */ = {isa = PBXBuildFile; fileRef = B30D0BB42B2A50D8005D9EA6 /* AppleBullet.wav */; };
+		B30D0BB72B2A50E2005D9EA6 /* AndroidLaser.wav in Resources */ = {isa = PBXBuildFile; fileRef = B30D0BB62B2A50E2005D9EA6 /* AndroidLaser.wav */; };
+		B30D0BB92B2A50F0005D9EA6 /* BackgroundEffect.wav in Resources */ = {isa = PBXBuildFile; fileRef = B30D0BB82B2A50F0005D9EA6 /* BackgroundEffect.wav */; };
+		B30D0BBD2B2A6B0B005D9EA6 /* BossLaser.wav in Resources */ = {isa = PBXBuildFile; fileRef = B30D0BBC2B2A6B0B005D9EA6 /* BossLaser.wav */; };
+		B30ED6972B2A1F3100FDB6A4 /* PressStart2P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B30ED6962B2A1F3100FDB6A4 /* PressStart2P.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +27,11 @@
 		0C04876D2B24C6AC00B2F6CF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0C0487762B24C85100B2F6CF /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		0C4EA1BC2B28B16800D1FF31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = PressStart2P.ttf; path = ../../../Projects/assets/TheLastAndroidAssets/PressStart2P.ttf; sourceTree = "<group>"; };
+		B30D0BB42B2A50D8005D9EA6 /* AppleBullet.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AppleBullet.wav; sourceTree = "<group>"; };
+		B30D0BB62B2A50E2005D9EA6 /* AndroidLaser.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AndroidLaser.wav; sourceTree = "<group>"; };
+		B30D0BB82B2A50F0005D9EA6 /* BackgroundEffect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BackgroundEffect.wav; sourceTree = "<group>"; };
+		B30D0BBC2B2A6B0B005D9EA6 /* BossLaser.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BossLaser.wav; sourceTree = "<group>"; };
+		B30ED6962B2A1F3100FDB6A4 /* PressStart2P.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PressStart2P.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +68,9 @@
 				0C0487662B24C6AB00B2F6CF /* testApp.swift */,
 				0C0487682B24C6AB00B2F6CF /* ContentView.swift */,
 				0C0487762B24C85100B2F6CF /* GameScene.swift */,
-				6F49B29D2B2A164100F9EF6B /* PressStart2P.ttf */,
 				0C04876A2B24C6AC00B2F6CF /* Assets.xcassets */,
+				B30D0BB12B2A4B33005D9EA6 /* Effects */,
+				B30D0BB02B2A4ACD005D9EA6 /* Fonts */,
 				0C04876C2B24C6AC00B2F6CF /* Preview Content */,
 			);
 			path = test;
@@ -73,6 +82,25 @@
 				0C04876D2B24C6AC00B2F6CF /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B30D0BB02B2A4ACD005D9EA6 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				B30ED6962B2A1F3100FDB6A4 /* PressStart2P.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		B30D0BB12B2A4B33005D9EA6 /* Effects */ = {
+			isa = PBXGroup;
+			children = (
+				B30D0BBC2B2A6B0B005D9EA6 /* BossLaser.wav */,
+				B30D0BB82B2A50F0005D9EA6 /* BackgroundEffect.wav */,
+				B30D0BB62B2A50E2005D9EA6 /* AndroidLaser.wav */,
+				B30D0BB42B2A50D8005D9EA6 /* AppleBullet.wav */,
+			);
+			path = Effects;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,8 +161,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F49B29E2B2A164100F9EF6B /* PressStart2P.ttf in Resources */,
+				B30ED6972B2A1F3100FDB6A4 /* PressStart2P.ttf in Resources */,
+				B30D0BB92B2A50F0005D9EA6 /* BackgroundEffect.wav in Resources */,
+				B30D0BBD2B2A6B0B005D9EA6 /* BossLaser.wav in Resources */,
+				B30D0BB52B2A50D8005D9EA6 /* AppleBullet.wav in Resources */,
 				0C04876E2B24C6AC00B2F6CF /* Preview Assets.xcassets in Resources */,
+				B30D0BB72B2A50E2005D9EA6 /* AndroidLaser.wav in Resources */,
 				0C04876B2B24C6AC00B2F6CF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
