@@ -5,6 +5,7 @@
 //  Created by Claudio Borrelli on 09/12/23.
 //
 
+
 import Foundation
 import SpriteKit
 
@@ -13,10 +14,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var humanLifePoints = 60
     let lifeLabel = SKLabelNode (fontNamed: "Helvetica")
     var human: SKSpriteNode!
-    var bigAndroid : SKSpriteNode!
+    var bigAndroids : [SKSpriteNode] = []
     let scoreLabel = SKLabelNode(fontNamed: "Helvetica")
     var score = 0
     var lastScore: Int = 0
+   
     
     struct PhysicsCategory {
         static let Android: UInt32 = 1
@@ -24,6 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Human: UInt32 = 4
         static let Bullet: UInt32 = 8
         static let ABullet: UInt32 = 16
+        static let BigBullet: UInt32 = 32
     }
     
     override func didMove(to view: SKView) {
@@ -70,28 +73,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let respawnDelay = TimeInterval(CGFloat(8))
             run(SKAction.sequence([SKAction.wait(forDuration: respawnDelay), SKAction.run {
                 self.generateAndroids()
+                //self.generateBigAndroid ()
                 self.respawnAndroid()
             }]))
         }
     
-   func generateBigAndroid () {
-        
-       let thresold = 100
-       let currentScore = (score / thresold)
-        
-        
-     if currentScore > lastScore {
-         let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
-         let randomY = CGFloat(700)
-         let noRandomSize1 = CGSize(width: CGFloat(70), height: CGFloat(70))
-         let randomDelay = TimeInterval(1)
-         bigAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize1, delay: randomDelay)
-         lastScore = currentScore
-         print ("generato")
-     }
+   func generateBigAndroid () { // generate big android from 100 to 100 intervals
+      let thresold = 100
+      let currentScore = (score / thresold)
+       
+       
+           if currentScore > lastScore {
+               let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
+               let randomY = CGFloat(700)
+               let noRandomSize1 = CGSize(width: CGFloat(70), height: CGFloat(70))
+               let randomDelay = TimeInterval(1)
+               let newbigAndroid = bigAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize1, delay: randomDelay)
+               bigAndroids.append (newbigAndroid)
+               lastScore = currentScore
+               print ("generato")
+           
+    }
+       
     }
     
     func generateAndroids () {
+        
         
         for _ in 1...2 {
                 let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
@@ -122,21 +129,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func bigAndroid ( pos: CGPoint, size: CGSize, delay: TimeInterval) {
-        let bigAndroidTexture = SKTexture(imageNamed: "android")
-        bigAndroid = SKSpriteNode(texture: bigAndroidTexture,size: size)
+    func bigAndroid ( pos: CGPoint, size: CGSize, delay: TimeInterval) -> SKSpriteNode {
+        let bigAndroidTexture = SKTexture(imageNamed: "bigandroid")
+        let newbigAndroid = SKSpriteNode(texture: bigAndroidTexture,size: size)
         
-        bigAndroid.position = pos
-        bigAndroid.name = "big android"
+        newbigAndroid.position = pos
+        newbigAndroid.name = "big android"
         
         //physics properties
-        bigAndroid.physicsBody = SKPhysicsBody(rectangleOf: bigAndroid.frame.size)
-        bigAndroid.physicsBody?.isDynamic = false
-        bigAndroid.physicsBody!.affectedByGravity = false
-        bigAndroid.physicsBody!.usesPreciseCollisionDetection = true
-        bigAndroid.physicsBody!.categoryBitMask = PhysicsCategory.BigAndroid
-        bigAndroid.physicsBody!.contactTestBitMask = PhysicsCategory.Bullet
-        
+        newbigAndroid.physicsBody = SKPhysicsBody(rectangleOf: newbigAndroid.frame.size)
+        newbigAndroid.physicsBody?.isDynamic = false
+        newbigAndroid.physicsBody!.affectedByGravity = false
+        newbigAndroid.physicsBody!.usesPreciseCollisionDetection = true
+        newbigAndroid.physicsBody!.categoryBitMask = PhysicsCategory.BigAndroid
+        newbigAndroid.physicsBody!.contactTestBitMask = PhysicsCategory.Bullet
+        self.addChild(newbigAndroid)
         
         //animation
         let moveRight = SKAction.move(by: CGVector(dx: 200, dy: 0), duration: 1.0)
@@ -144,13 +151,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let wait = SKAction.wait(forDuration: 0.5)
         let sequence = SKAction.sequence([SKAction.wait(forDuration: delay),moveRight,wait,moveLeft,wait])
         let repeatSequence = SKAction.repeatForever(sequence)
-        bigAndroid.run(repeatSequence)
+        newbigAndroid.run(repeatSequence)
         
         let fireActionBigAndroid = SKAction.run {
-            if !self.bigAndroid.hasActions() {
+            if !newbigAndroid.hasActions() {
                 return
             }
-            self.androidBullet(textureName: "bulletBA", position: self.bigAndroid.position)
+            self.bigAndroidBullet(textureName: "bulletBA", position: newbigAndroid.position)
             
            
             }
@@ -158,12 +165,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let shootAndWaitAndroid = SKAction.sequence([SKAction.wait(forDuration: 2.0),fireActionBigAndroid])
             let repeatAndroidShooting = SKAction.repeatForever(shootAndWaitAndroid)
             run(repeatAndroidShooting)
-        self.addChild(bigAndroid)
+        return newbigAndroid
     }
     
     
     func createAndroid (pos: CGPoint,size: CGSize, delay: TimeInterval){
-        let androidTexture = SKTexture(imageNamed: "bigandroid")
+        let androidTexture = SKTexture(imageNamed: "android")
         let android = SKSpriteNode(texture: androidTexture,size: size)
         
         android.position = pos
@@ -194,14 +201,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let fireAction = SKAction.run {
             if !android.hasActions() {
-            return
-        }
-                if size.width < 80 {
-                    self.androidBullet(textureName: "bulletA", position: android.position)
-                } else {
-                    self.androidBullet(textureName: "bulletBA", position: android.position)
-                }
+                return
             }
+            self.androidBullet(textureName: "bulletA", position: android.position)
+        }
+        
             let delayFire = TimeInterval(4)
             let fireSequence = SKAction.sequence([SKAction.wait(forDuration: delayFire), fireAction])
             let repeatFire = SKAction.repeatForever(fireSequence)
@@ -209,6 +213,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         android.run(repeatFire)
     
         
+    }
+    
+    func bigAndroidBullet (textureName: String, position: CGPoint) {
+        let bigBulletTexture = SKTexture(imageNamed: textureName)
+        let bigBullet = SKSpriteNode(texture: bigBulletTexture, size: CGSize(width: 40, height: 40))
+        bigBullet.name = "Big Bullet"
+        bigBullet.position = CGPoint(x: position.x, y: position.y - 20)
+
+        // Physics properties
+    bigBullet.physicsBody = SKPhysicsBody(circleOfRadius: 5)
+    bigBullet.physicsBody?.isDynamic = true
+    bigBullet.physicsBody!.affectedByGravity = false
+    bigBullet.physicsBody!.usesPreciseCollisionDetection = true
+    bigBullet.physicsBody!.categoryBitMask = PhysicsCategory.BigBullet
+    bigBullet.physicsBody!.contactTestBitMask = PhysicsCategory.Human
+    bigBullet.physicsBody!.collisionBitMask = 0
+        
+    
+    addChild(bigBullet)
+    
+
+        // Bullet movement
+        let moveUp = SKAction.move(by: CGVector(dx: 0, dy: -800), duration: 4.0)
+        let wait = SKAction.wait(forDuration: 1.0)
+        let delete = SKAction.removeFromParent()
+        let sequenceOfActions = SKAction.sequence([moveUp,wait, delete])
+
+    bigBullet.run(sequenceOfActions)
     }
     
     func androidBullet(textureName: String, position: CGPoint) {
@@ -299,6 +331,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
    
     
+    override func update(_ delay: TimeInterval) {
+        for bigAndroid in bigAndroids {
+            let moveRight = SKAction.move(by: CGVector(dx: 200, dy: 0), duration: 1.0)
+            let moveLeft = SKAction.move(by: CGVector(dx: -200, dy: 0), duration: 1.0)
+            let wait = SKAction.wait(forDuration: 0.5)
+            let sequence = SKAction.sequence([SKAction.wait(forDuration: delay), moveRight, wait, moveLeft, wait])
+            let repeatSequence = SKAction.repeatForever(sequence)
+
+            bigAndroid.run(repeatSequence)
+        }
+    }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
@@ -317,16 +361,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             contact.bodyA.node?.removeFromParent()
             contact.bodyB.node?.removeFromParent()
             
-            score += 10
+            score += 20
             scoreLabel.text = "Score: \(score)"
-        } 
+            
+           
+        }
        if collision3.categoryBitMask == PhysicsCategory.BigAndroid {
            
             contact.bodyA.node?.removeFromParent()
             contact.bodyB.node?.removeFromParent()
             
-           bigAndroid.removeAllActions()
-            score += 50
+           removeAllActions()
+            score += 10
             scoreLabel.text = "Score: \(score)"
         }
         
@@ -350,3 +396,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
 }
+
