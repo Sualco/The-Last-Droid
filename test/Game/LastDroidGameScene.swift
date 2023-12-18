@@ -15,6 +15,8 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
     @Query(sort: \Partita.playedAt, order: .reverse) var allPartiteSalvate: [Partita]
     var gameLogic: LastDroidGameLogic = LastDroidGameLogic.shared
     
+    @State var gameIsDismissed : Bool = false
+    
     static var madonna = LastDroidGameScene()
     
     var numberOfHits = 0
@@ -565,30 +567,9 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
 
             contact.bodyB.node?.removeFromParent()
         }
+       
         
-        /*if collision4.categoryBitMask == PhysicsCategory.Human {
-            if !isInvicible {
-                numberOfHits += 1
-                humanLifePoints -= 20
-                lifeLabel.text = "Life Points: \(humanLifePoints)"
-
-                // Aggiorna la UI dei cuori
-                updateLifePoints()
-
-                // Esegui l'animazione di lampeggiamento e l'invincibilità
-                runInvincibilityAnimation()
-
-                if numberOfHits >= 6 {
-                    contact.bodyA.node?.removeFromParent()
-                    humanLifePoints = 0
-                    removeAllActions()
-                }
-            } else {
-                runInvincibilityAnimation()
-            }
-
-            contact.bodyB.node?.removeFromParent()
-        }*/
+       
         
       
     }
@@ -601,15 +582,13 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
 extension LastDroidGameScene {
     var isGameOver: Bool {
         updateFinalScore()
-
         return gameLogic.isGameOver || humanLifePoints == 0
         
     }
     
     private func finishGame() {
-        /*let transition = SKTransition.fade(withDuration: 1.0)
-            let gameOverScene = GameOverScene(size: self.size)
-            self.view?.presentScene(gameOverScene, transition: transition)*/
+        backgroundMusic?.stop()
+        gameIsDismissed = true
         gameLogic.isGameOver = true
     }
 }

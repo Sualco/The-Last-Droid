@@ -15,48 +15,70 @@ struct LeaderboardView: View {
 
     @Binding var currentGameState: GameState
     
-
-    
     @Environment(\.modelContext) private var context
-    @Query(sort: \Partita.playedAt, order: .reverse) var allPartiteSalvate: [Partita]
+    @Query(sort: \Partita.punteggiodasalvare, order: .reverse) var allPartiteSalvate: [Partita]
+    
+    @State var range: Range<Int> = 0..<3
+
 
     var body: some View {
         NavigationView {
             ZStack {
                 Image ("background")
-                Text ("LeadBoard")
-                    .font(.custom("PressStart2P", size: 20))
-                    .padding(.bottom,560)
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
                 
-                VStack {
-                    Section {
-                        List {
-                            ForEach(allPartiteSalvate) {partita in
-                                VStack(alignment: .leading) {
-                                    Text(partita.playerName)
-                                    Text(partita.playedAt, style: .time)
-                                        .font(.caption)
-                                    //                        Text(partita.punteggiodasalvare)
-                                    Text("Score: \(partita.punteggiodasalvare)")
-                                } // v stack
+//                Text ("Leaderboard")
+//                    .font(.custom("PressStart2P", size: 28))
+//                    .padding(.bottom,560)
+//
+                VStack{
+                    Text ("Leaderboard")
+                        .font(.custom("PressStart2P", size: 25))
+                        .padding()
+                    
+                    Spacer ()
+                    List {
+                        ForEach(allPartiteSalvate.prefix(10)) {partita in
+                            HStack() {
+                                Text(partita.playerName)
+                                    .font(.custom("PressStart2P",size: 15))
+                                    .background(Color.clear)
+                                Spacer()
+                                
+                                //                                    Text(partita.playedAt, style: .time)
+                                //                                        .font(.caption)
+                                //                        Text(partita.punteggiodasalvare)
+                                Text("Score: \(partita.punteggiodasalvare)")
+                                    .font(.custom("PressStart2P",size: 15))
+                                    .background(Color.clear)
+                                
                             }
+                            
                         }
                     }
+                    .listStyle(PlainListStyle())
+                    .padding(.horizontal,20)
+                    .background(Color.clear)
+                    Spacer()
                     
-                        Button {
-                            withAnimation { self.backToMain() }
-                        } label: {
-                            Text("BACK")
-                                .font(.custom("PressStart2P", size: 20))
-                                .bold()
-                                .padding(.bottom, 90.0)
-                                .frame(maxWidth: .infinity)
-                        }
-                        .foregroundColor(.pink)
-                        .cornerRadius(10.0)
-            }
+                    
+                    Button {
+                        withAnimation { self.backToMain() }
+                    } label: {
+                        Text("BACK")
+                            .font(.custom("PressStart2P", size: 20))
+                            .bold()
+                            .padding(.bottom, 90.0)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .foregroundColor(.pink)
+                    .cornerRadius(10.0)
+                }
+                .padding(.top,150)
             
-        }
+            }
         }
     }
     

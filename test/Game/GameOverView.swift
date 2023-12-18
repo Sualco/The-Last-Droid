@@ -15,42 +15,57 @@ import SwiftData
 
 struct GameOverView: View {
     @Binding var currentGameState: GameState
-    
+    @FocusState private var nameIsFocused: Bool
     @Environment(\.modelContext) private var context
     @Query(sort: \Partita.playedAt, order: .reverse) var allPartiteSalvate: [Partita]
     var gameLogic: LastDroidGameLogic = LastDroidGameLogic.shared
+    private let characterLimit = 3
 
     var bambino = LastDroidGameScene.madonna.finalScore
     @State var christian: String = ""
     var finalscore =  0
     
+    
     var body: some View {
         ZStack {
+           
             Image("gameover")
                 .resizable()
                 .ignoresSafeArea()
             
             VStack{
-                Text("GAME OVER")
-                    .font(.custom("PressStart2P", size: 32))
-                    .fontWeight(.bold)
-                    .foregroundColor(.pink)
+                
+                Image("gameovertext")
+                    
                     .padding(.bottom, 90)
+                Text ("Score: \(gameLogic.currentScore)")
+                    .font(.custom("PressStart2P", size: 20))
+                    .foregroundStyle(.yellow)
+                    .padding()
+                
                 
                 TextField(
-                    "insert your name",
-                    text: $christian
-                    
-                )
+                    "Insert your name",
+                    text: $christian)
+                .focused($nameIsFocused)
+                .onChange(of: christian) {
+                    newValue in
+                    if christian.count > characterLimit {
+                        christian = String(christian.prefix(characterLimit))
+                    }
+                }
+                .font(.custom("PressStart2P", size: 10))
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .disableAutocorrection(true)
                 .padding()
                 
                 Button("Save") {
                           saveName()
+                        nameIsFocused = true
                            }
                 .foregroundStyle(.yellow)
                 .font(.custom("PressStart2P", size: 20))
+                .padding()
                 
                 
                 HStack {
@@ -58,19 +73,19 @@ struct GameOverView: View {
                     Button {
                         withAnimation { self.backToMainMenu() }
                     } label: {
-                        Image(systemName: "arrow.backward")
-                            .foregroundColor(.yellow)
+                        Image("backarrow")
+                            
                             .font(.custom("PressStart2P", size: 40))
                             .frame(width: 50, height: 50)
                     }
-                    //.background(Rectangle().foregroundColor(Color(uiColor: UIColor.systemGray6)).frame(width: 50, height: 50, alignment: .bottom))
+                    
                     
                     Spacer()
                     
                     Button {
                         withAnimation { self.restartGame() }
                     } label: {
-                        Image(systemName: "arrow.clockwise")
+                        Image("replay")
                             .foregroundColor(.yellow)
                             .font(.custom("PressStart2P", size: 40))
                             .frame(width: 50, height: 50)
@@ -79,7 +94,7 @@ struct GameOverView: View {
                     
                     Spacer()
                 }
-            }
+            }.padding()
             
         }
         .statusBar(hidden: true)

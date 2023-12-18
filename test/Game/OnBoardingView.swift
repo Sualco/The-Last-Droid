@@ -17,36 +17,39 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            Image("background")
+            Image("gameover")
                 .resizable()
                 .ignoresSafeArea()
             VStack {
                 VStack {
                     HStack {
-                        Image(systemName: "hand.tap")
-                            .foregroundStyle(.black)
+                        
                         Text("Slide to Move")
                             .font(.custom("PressStart2P", size: 20))
                             .foregroundStyle(.yellow)
                     }
                     .padding()
-                    Text("Slide left and right to shoot the hideous droids. Don't let them shoot you!").font(.custom("PressStart2P", size: 10))
+                    Text("Slide left and right to shoot the hideous droids. Don't let them shoot you!").font(.custom("PressStart2P", size: 12))
+                        .lineSpacing(/*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
                         .foregroundStyle(.yellow)
+                        .padding()
                 }
                 .padding(.bottom, 100)
                 
                 
                 VStack {
                     HStack {
-                        Image(systemName: "divide.circle")
-                            .foregroundStyle(.black)
+                        
                         Text("Destroy Droids")
                             .font(.custom("PressStart2P", size: 20))
+                            
                             .foregroundStyle(.yellow)
                     }
                     .padding()
-                    Text("Destroy droids and save the earth shooting them an apple").font(.custom("PressStart2P", size: 10))
+                    Text("Destroy droids and save the earth shooting them an apple").font(.custom("PressStart2P", size: 12))
                         .foregroundStyle(.yellow)
+                        .lineSpacing(/*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
+                        .padding()
                     Button {
                         withAnimation { self.backToMain() }
                     } label: {
