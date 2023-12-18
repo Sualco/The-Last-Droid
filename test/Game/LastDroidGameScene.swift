@@ -4,27 +4,42 @@
 //
 //  Created by Claudio Borrelli on 09/12/23.
 //
-
-
+import SwiftData
+import SwiftUI
 import Foundation
 import SpriteKit
 import AVFoundation
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
+    @Environment(\.modelContext) private var context
+    @Query(sort: \Partita.playedAt, order: .reverse) var allPartiteSalvate: [Partita]
+    var gameLogic: LastDroidGameLogic = LastDroidGameLogic.shared
+    
+    static var madonna = LastDroidGameScene()
+    
     var numberOfHits = 0
     var humanLifePoints = 60
+    var bigAndroidLifePoints = 20
+    var bigAndroidHits = 0
     let lifeLabel = SKLabelNode (fontNamed: "PressStart2P")
     var human: SKSpriteNode!
     var score = 0
     var lastScore: Int = 0
+    var finalScore = 0
     let scoreLabel = SKLabelNode(fontNamed: "PressStart2P")
     var bigAndroids : [SKSpriteNode] = []
-
+    var isInvicible = false
+    var lastUpdate: TimeInterval = 0
+    var androidCounter: Int = 0
+    let maxNumber: Int = 20
+    
    
     var backgroundMusic: AVAudioPlayer?
     var bulletHumanSound: AVAudioPlayer?
     var bulletAndroidSound: AVAudioPlayer?
     var bulletBossSound: AVAudioPlayer?
+    
+
     
     struct PhysicsCategory {
         static let Android: UInt32 = 1
@@ -36,20 +51,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didMove(to view: SKView) {
-        scoreLabel.text = "Score: \(score)"
+        
+        
+        
+        
+        scoreLabel.text = "Score: \(gameLogic.currentScore)"
         scoreLabel.fontSize = 13
         scoreLabel.position = CGPoint(x: UIScreen.main.bounds.maxX - 100, y: UIScreen.main.bounds.maxY - 100)
+        scoreLabel.color = .yellow
         addChild(scoreLabel)
         
-        lifeLabel.text = "Life Points: \(humanLifePoints)"
-        lifeLabel.fontSize = 13
-        lifeLabel.position = CGPoint(x: UIScreen.main.bounds.minX + 100, y: UIScreen.main.bounds.minY + 750)
-        addChild(lifeLabel)
+        
+        updateLifePoints()
         print ("game loaded")
         
         let background = SKSpriteNode(imageNamed: "background")
             background.position = CGPoint(x: size.width / 2, y: size.height / 2)
             background.zPosition = -1
+            background.size = CGSize(width: size.width, height: size.height)
+            
             addChild(background)
         
         self.physicsWorld.contactDelegate = self
@@ -63,6 +83,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         respawnAndroid()
         
         respawnBigAndroid()
+        
+        updateFinalScore()
+        
         
         if let backgroundSoundURL = Bundle.main.url(forResource: "BackgroundEffect", withExtension: "wav") {
                    do {
@@ -101,43 +124,101 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 } catch {
                     print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
                 }
-//        creare prima funzione bullet big android
+
         
         
         
     }
-    func respawnBigAndroid () {
-        let respawnDelay = TimeInterval(CGFloat(2))
-        run(SKAction.sequence([SKAction.wait(forDuration: respawnDelay), SKAction.run {
+    
+    func updateFinalScore () {
+        let currentScore = gameLogic.currentScore
+             if currentScore > finalScore{
+                 finalScore = currentScore
+                 print ("generato \(finalScore)")
+      }
+        
+          
+        
+    }
+    
+    func updateLifePoints () {
+    
+            self.children.filter { $0.name == "lifePoints" }.forEach { $0.removeFromParent() }
+
             
+            let fullHearts = humanLifePoints / 20
+            let halfHearts = (humanLifePoints % 20) / 10
+
+            
+            for i in 0..<fullHearts {
+                let heart = SKSpriteNode(imageNamed: "fullheart")
+                heart.name = "lifePoints"
+                heart.size = CGSize(width: 20, height: 20)
+                heart.position = CGPoint(x: UIScreen.main.bounds.minX + 40 + CGFloat(i * 30), y: UIScreen.main.bounds.maxY - 85)
+                addChild(heart)
+            }
+
+            
+            for i in 0..<halfHearts {
+                let heart = SKSpriteNode(imageNamed: "halfheart")
+                heart.name = "lifePoints"
+                heart.size = CGSize(width: 20, height: 20)
+                let xOffset = CGFloat(fullHearts * 30)
+                heart.position = CGPoint(x: UIScreen.main.bounds.minX + 40 + xOffset + CGFloat(i * 30), y: UIScreen.main.bounds.maxY - 85)
+                addChild(heart)
+            }
+        for _ in 0..<(3 - fullHearts - halfHearts) {
+            let heart = SKSpriteNode(imageNamed: "emptyheart")
+            heart.name = "lifeNode"
+            heart.size = CGSize(width: 20, height: 20)
+            let xOffset = CGFloat((fullHearts + halfHearts) * 30)
+            heart.position = CGPoint(x: UIScreen.main.bounds.minX + 40 + xOffset, y: UIScreen.main.bounds.maxY - 85)
+            addChild(heart)
+        }
+    }
+    func respawnBigAndroid () {
+        var respawnDelay = TimeInterval(CGFloat(2))
+        var increaseDifficultyScore = 400
+        run(SKAction.sequence([SKAction.wait(forDuration: respawnDelay), SKAction.run {
             self.generateBigAndroid()
+            
+            if self.gameLogic.currentScore >= increaseDifficultyScore {
+                respawnDelay -= 0.2
+                increaseDifficultyScore += 200
+            }
             self.respawnBigAndroid()
         }]))
     }
     
     func respawnAndroid() {
-            let respawnDelay = TimeInterval(CGFloat(8))
+            var respawnDelay = TimeInterval(CGFloat(8))
+            var increaseDifficultyScore = 200
+            
             run(SKAction.sequence([SKAction.wait(forDuration: respawnDelay), SKAction.run {
                 self.generateAndroids()
-                //self.generateBigAndroid ()
+                if self.gameLogic.currentScore >= increaseDifficultyScore {
+                    respawnDelay -= 0.5
+                    increaseDifficultyScore += 200
+                }
+                
                 self.respawnAndroid()
             }]))
         }
     
    func generateBigAndroid () { // generate big android from 100 to 100 intervals
       let thresold = 100
-      let currentScore = (score / thresold)
+       let currentScore = (gameLogic.currentScore / thresold)
        
        
            if currentScore > lastScore {
                let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
                let randomY = CGFloat(700)
-               let noRandomSize1 = CGSize(width: CGFloat(70), height: CGFloat(70))
+               let noRandomSize1 = CGSize(width: CGFloat(70), height: CGFloat(80))
                let randomDelay = TimeInterval(1)
                let newbigAndroid = bigAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize1, delay: randomDelay)
                bigAndroids.append (newbigAndroid)
                lastScore = currentScore
-               print ("generato")
+               print ("generato \(lastScore)")
            
     }
        
@@ -145,31 +226,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func generateAndroids () {
         
-        
-        for _ in 1...2 {
+        if (androidCounter <= maxNumber){
+            
+            for _ in 1...1 {
                 let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
                 let randomY = CGFloat(600)
-                let noRandomSize = CGSize(width: CGFloat(50), height: CGFloat(50))
+                let noRandomSize = CGSize(width: CGFloat(30), height: CGFloat(50))
                 let randomDelay = TimeInterval(arc4random_uniform(5) + 1)
-
+                androidCounter+=1
                 createAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize, delay: randomDelay)
             }
-        for _ in 1...2 {
+            for _ in 1...1 {
+                let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
+                let randomY = CGFloat(550)
+                let noRandomSize = CGSize(width: CGFloat(30), height: CGFloat(40))
+                let randomDelay = TimeInterval(arc4random_uniform(5) + 1)
+                androidCounter+=1
+                createAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize, delay: randomDelay)
+            }
+            for _ in 1...1 {
                 let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
                 let randomY = CGFloat(500)
-                let noRandomSize = CGSize(width: CGFloat(50), height: CGFloat(50))
+                let noRandomSize = CGSize(width: CGFloat(30), height: CGFloat(40))
                 let randomDelay = TimeInterval(arc4random_uniform(5) + 1)
-
+                androidCounter+=1
                 createAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize, delay: randomDelay)
             }
-        for _ in 1...2 {
-                let randomX = CGFloat(arc4random_uniform(UInt32(size.width))) / 2
-                let randomY = CGFloat(400)
-                let noRandomSize = CGSize(width: CGFloat(50), height: CGFloat(50))
-                let randomDelay = TimeInterval(arc4random_uniform(5) + 1)
-
-                createAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize, delay: randomDelay)
-            }
+        }
         
         
         
@@ -210,7 +293,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         let shootAndWaitAndroid = SKAction.sequence([SKAction.wait(forDuration: 2.0),fireActionBigAndroid])
             let repeatAndroidShooting = SKAction.repeatForever(shootAndWaitAndroid)
-            run(repeatAndroidShooting)
+        newbigAndroid.run(repeatAndroidShooting)
         return newbigAndroid
 //        self.addChild(bigAndroid)
         
@@ -224,6 +307,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         android.position = pos
         android.name = "androide"
         
+        let xRange: SKRange = SKRange(lowerLimit: +android.size.width, upperLimit: scene!.size.width)
+        let xConstraint = SKConstraint.positionX(xRange)
+        android.constraints = [xConstraint]
         
         //physics properties
         
@@ -237,10 +323,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //animations
         
-        let moveRight = SKAction.move(by: CGVector (dx: 200, dy: 0), duration: 1.0)
         
+        let moveRight = SKAction.move(by: CGVector (dx: 200, dy: 0), duration: 1.0)
         let moveLeft = SKAction.move(by: CGVector(dx: -200, dy: 0), duration: 1.0)
-        //let moveDown = SKAction.move(by: CGVector(dx: 0, dy: -50), duration: 0.5)
+        
         let wait = SKAction.wait(forDuration: 0.5)
         let sequence = SKAction.sequence([SKAction.wait(forDuration: delay),moveRight,wait,moveLeft,wait])
         let repeatSequence = SKAction.repeatForever(sequence)
@@ -254,7 +340,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.androidBullet(textureName: "bulletA", position: android.position)
         }
         
-            let delayFire = TimeInterval(4)
+        let delayFire = TimeInterval(.random(in: 2...6))
             let fireSequence = SKAction.sequence([SKAction.wait(forDuration: delayFire), fireAction])
             let repeatFire = SKAction.repeatForever(fireSequence)
 
@@ -328,7 +414,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createHuman () {
         let humanTexture = SKTexture (imageNamed: "human")
         human = SKSpriteNode(texture: humanTexture)
-        human.size = CGSize(width: 70, height: 70)
+        human.size = CGSize(width: 90, height: 90)
         human.position =  CGPoint(x: UIScreen.main.bounds.width / 2, y:70)
         human.name = "Human"
         
@@ -339,7 +425,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         human.physicsBody!.affectedByGravity = false
         human.physicsBody!.usesPreciseCollisionDetection = true
         human.physicsBody!.categoryBitMask = PhysicsCategory.Human
-        human.physicsBody!.contactTestBitMask = PhysicsCategory.Android
+        human.physicsBody!.contactTestBitMask = PhysicsCategory.ABullet
+        human.physicsBody!.contactTestBitMask = PhysicsCategory.BigBullet
+        
         self.addChild(human)
         
         let shootingFire = SKAction.run {
@@ -372,7 +460,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(bullet)
         
         //bullet movement
-        let moveUp = SKAction.move(by: CGVector(dx: 0, dy: 800), duration: 2.0)
+        let moveUp = SKAction.move(by: CGVector(dx: 0, dy: 800), duration: 1.5)
         let delete = SKAction.removeFromParent()
         let sequenceOfActions = SKAction.sequence([moveUp,delete])
         
@@ -380,9 +468,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bulletHumanSound?.play()
     }
     
+    func runInvincibilityAnimation() {
+        // Esegui l'animazione di lampeggiamento
+        let blinkAction = SKAction.sequence([SKAction.fadeOut(withDuration: 0.1), SKAction.fadeIn(withDuration: 0.1)])
+        let blinkSequence = SKAction.repeat(blinkAction, count: 10)
+        
+        // Aggiungi azioni aggiuntive, se necessario
+        
+        human.run(blinkSequence) {
+            // Fine dell'animazione di lampeggiamento
+            self.isInvicible = false
+            // Reimposta l'invincibilità
+        }
+    }
+    
    
     
     override func update(_ delay: TimeInterval) {
+        // GAME OVER CONDITION
+        if self.isGameOver { self.finishGame() }
+        if self.lastUpdate == 0 { self.lastUpdate = delay }
+        self.lastUpdate = delay
+        
         for bigAndroid in bigAndroids {
             let moveRight = SKAction.move(by: CGVector(dx: 200, dy: 0), duration: 1.0)
             let moveLeft = SKAction.move(by: CGVector(dx: -200, dy: 0), duration: 1.0)
@@ -397,7 +504,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            let newLocation = CGPoint(x: location.x, y: human.position.y)
+            let minX = CGFloat(20)
+            let maxX = CGFloat(370)
+            let clampedX = max(min(location.x,maxX), minX)
+            let newLocation = CGPoint(x: clampedX, y: human.position.y)
             let move = SKAction.move(to: newLocation, duration: 0.1)
             human.run(move)
         }
@@ -407,44 +517,99 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let collision = contact.bodyA.categoryBitMask == PhysicsCategory.Bullet ? contact.bodyB : contact.bodyA
         let collision2 = contact.bodyA.categoryBitMask == PhysicsCategory.ABullet ? contact.bodyB : contact.bodyA
         let collision3 = contact.bodyA.categoryBitMask == PhysicsCategory.Bullet ? contact.bodyB : contact.bodyA
+        //let collision4 = contact.bodyA.categoryBitMask == PhysicsCategory.BigBullet ? contact.bodyB : contact.bodyA
         
         if collision.categoryBitMask == PhysicsCategory.Android {
             contact.bodyA.node?.removeFromParent()
             contact.bodyB.node?.removeFromParent()
-            
-            score += 20
-            scoreLabel.text = "Score: \(score)"
+            androidCounter-=1
+            gameLogic.currentScore += 20
+            scoreLabel.text = "Score: \(gameLogic.currentScore)"
             
            
         }
        if collision3.categoryBitMask == PhysicsCategory.BigAndroid {
-           
-            contact.bodyA.node?.removeFromParent()
-            contact.bodyB.node?.removeFromParent()
-            
-           removeAllActions()
-            score += 10
-            scoreLabel.text = "Score: \(score)"
+           bigAndroidHits += 1
+           bigAndroidLifePoints -= 10
+           gameLogic.currentScore += 40
+           scoreLabel.text = "Score: \(gameLogic.currentScore)"
+           if bigAndroidHits >= 2 {
+               contact.bodyA.node?.removeFromParent()
+               
+            }
+           contact.bodyB.node?.removeFromParent()
         }
         
         
         
         if collision2.categoryBitMask == PhysicsCategory.Human {
-            numberOfHits += 1
-            humanLifePoints -= 10
-            lifeLabel.text = "Life Points : \(humanLifePoints)"
-            //contact.bodyA.node?.removeFromParent()
-            contact.bodyB.node?.removeFromParent()
-            
-            if numberOfHits >= 6 {
-                contact.bodyA.node?.removeFromParent()
-                humanLifePoints = 0
-            removeAllActions()
+            if !isInvicible {
+                numberOfHits += 1
+                humanLifePoints -= 10
+                
+
+                // Aggiorna la UI dei cuori
+                updateLifePoints()
+
+                // Esegui l'animazione di lampeggiamento e l'invincibilità
+                runInvincibilityAnimation()
+
+                if numberOfHits >= 6 {
+                    contact.bodyA.node?.removeFromParent()
+                    humanLifePoints = 0
+                    removeAllActions()
+                }
+            } else {
+                runInvincibilityAnimation()
             }
+
+            contact.bodyB.node?.removeFromParent()
         }
+        
+        /*if collision4.categoryBitMask == PhysicsCategory.Human {
+            if !isInvicible {
+                numberOfHits += 1
+                humanLifePoints -= 20
+                lifeLabel.text = "Life Points: \(humanLifePoints)"
+
+                // Aggiorna la UI dei cuori
+                updateLifePoints()
+
+                // Esegui l'animazione di lampeggiamento e l'invincibilità
+                runInvincibilityAnimation()
+
+                if numberOfHits >= 6 {
+                    contact.bodyA.node?.removeFromParent()
+                    humanLifePoints = 0
+                    removeAllActions()
+                }
+            } else {
+                runInvincibilityAnimation()
+            }
+
+            contact.bodyB.node?.removeFromParent()
+        }*/
         
       
     }
     
 }
 
+
+
+// GAME OVER PRESENTATION
+extension LastDroidGameScene {
+    var isGameOver: Bool {
+        updateFinalScore()
+
+        return gameLogic.isGameOver || humanLifePoints == 0
+        
+    }
+    
+    private func finishGame() {
+        /*let transition = SKTransition.fade(withDuration: 1.0)
+            let gameOverScene = GameOverScene(size: self.size)
+            self.view?.presentScene(gameOverScene, transition: transition)*/
+        gameLogic.isGameOver = true
+    }
+}

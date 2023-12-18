@@ -6,12 +6,18 @@
 //
 
 import SwiftUI
+import Foundation
+import SwiftData
 
 @main
-struct testApp: App {
+struct TheLastDroiddApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-        }
+
+        }.modelContainer(for: [
+            Partita.self
+        ])
     }
 }
