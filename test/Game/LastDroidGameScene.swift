@@ -34,14 +34,11 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
     var lastUpdate: TimeInterval = 0
     var androidCounter: Int = 0
     let maxNumber: Int = 20
-    
    
     var backgroundMusic: AVAudioPlayer?
     var bulletHumanSound: AVAudioPlayer?
     var bulletAndroidSound: AVAudioPlayer?
     var bulletBossSound: AVAudioPlayer?
-    
-
     
     struct PhysicsCategory {
         static let Android: UInt32 = 1
@@ -54,15 +51,11 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         
-        
-        
-        
         scoreLabel.text = "Score: \(gameLogic.currentScore)"
         scoreLabel.fontSize = 13
         scoreLabel.position = CGPoint(x: UIScreen.main.bounds.maxX - 100, y: UIScreen.main.bounds.maxY - 100)
         scoreLabel.color = .yellow
         addChild(scoreLabel)
-        
         
         updateLifePoints()
         print ("game loaded")
@@ -100,7 +93,7 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
                    }
                }
         
-        let bulletHumanSoundURL = Bundle.main.url(forResource: "AppleBullet", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
+        let bulletHumanSoundURL = Bundle.main.url(forResource: "AppleBullet", withExtension: "wav")
                 do {
                     try bulletHumanSound = AVAudioPlayer(contentsOf: bulletHumanSoundURL!)
                     bulletHumanSound?.volume = 0.8
@@ -109,7 +102,7 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
                     print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
                 }
         
-        let bulletAndroidSoundURL = Bundle.main.url(forResource: "AndroidLaser", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
+        let bulletAndroidSoundURL = Bundle.main.url(forResource: "AndroidLaser", withExtension: "wav")
                 do {
                     try bulletAndroidSound = AVAudioPlayer(contentsOf: bulletAndroidSoundURL!)
                     bulletAndroidSound?.volume = 0.1
@@ -118,7 +111,7 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
                     print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
                 }
         
-        let bulletBossSoundURL = Bundle.main.url(forResource: "BossLaser", withExtension: "wav") // Sostituisci con il tuo nome di file audio e l'estensione corretti
+        let bulletBossSoundURL = Bundle.main.url(forResource: "BossLaser", withExtension: "wav")
                 do {
                     try bulletBossSound = AVAudioPlayer(contentsOf: bulletBossSoundURL!)
                     bulletBossSound?.volume = 0.1
@@ -126,10 +119,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
                 } catch {
                     print("Errore durante il caricamento del file audio: \(error.localizedDescription)")
                 }
-
-        
-        
-        
     }
     
     func updateFinalScore () {
@@ -138,19 +127,14 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
                  finalScore = currentScore
                  print ("generato \(finalScore)")
       }
-        
-          
-        
     }
     
     func updateLifePoints () {
     
             self.children.filter { $0.name == "lifePoints" }.forEach { $0.removeFromParent() }
 
-            
             let fullHearts = humanLifePoints / 20
             let halfHearts = (humanLifePoints % 20) / 10
-
             
             for i in 0..<fullHearts {
                 let heart = SKSpriteNode(imageNamed: "fullheart")
@@ -221,9 +205,7 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
                bigAndroids.append (newbigAndroid)
                lastScore = currentScore
                print ("generato \(lastScore)")
-           
-    }
-       
+           }
     }
     
     func generateAndroids () {
@@ -255,9 +237,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
                 createAndroid(pos: CGPoint(x: randomX, y: randomY), size: noRandomSize, delay: randomDelay)
             }
         }
-        
-        
-        
     }
     
     func bigAndroid (pos: CGPoint, size: CGSize, delay: TimeInterval) -> SKSpriteNode {
@@ -289,8 +268,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
                 return
             }
             self.bigAndroidBullet(textureName: "bulletBA", position: newbigAndroid.position)
-            
-           
             }
 
         let shootAndWaitAndroid = SKAction.sequence([SKAction.wait(forDuration: 2.0),fireActionBigAndroid])
@@ -298,7 +275,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
         newbigAndroid.run(repeatAndroidShooting)
         return newbigAndroid
 //        self.addChild(bigAndroid)
-        
     }
     
     
@@ -325,7 +301,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
         
         //animations
         
-        
         let moveRight = SKAction.move(by: CGVector (dx: 200, dy: 0), duration: 1.0)
         let moveLeft = SKAction.move(by: CGVector(dx: -200, dy: 0), duration: 1.0)
         
@@ -347,8 +322,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
             let repeatFire = SKAction.repeatForever(fireSequence)
 
         android.run(repeatFire)
-    
-        
     }
     
     func bigAndroidBullet (textureName: String, position: CGPoint) {
@@ -369,7 +342,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
     
     addChild(bigBullet)
     
-
         // Bullet movement
         let moveUp = SKAction.move(by: CGVector(dx: 0, dy: -800), duration: 4.0)
         let wait = SKAction.wait(forDuration: 1.0)
@@ -407,10 +379,7 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
 
         aBullet.run(sequenceOfActions)
         bulletAndroidSound?.play()
-        
     }
-    
-   
     
     
     func createHuman () {
@@ -439,7 +408,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
             let shootAndWait = SKAction.sequence([shootingFire, SKAction.wait(forDuration: 2.0)])
             let repeatShooting = SKAction.repeatForever(shootAndWait)
             run(repeatShooting)
-
     
     }
     
@@ -543,7 +511,6 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         
-        
         if collision2.categoryBitMask == PhysicsCategory.Human {
             if !isInvicible {
                 numberOfHits += 1
@@ -567,16 +534,8 @@ class LastDroidGameScene: SKScene, SKPhysicsContactDelegate {
 
             contact.bodyB.node?.removeFromParent()
         }
-       
-        
-       
-        
-      
     }
-    
 }
-
-
 
 // GAME OVER PRESENTATION
 extension LastDroidGameScene {

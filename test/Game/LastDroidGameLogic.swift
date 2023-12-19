@@ -10,32 +10,20 @@ import SpriteKit
 import SwiftUI
 
 class LastDroidGameLogic: ObservableObject {
-    
-    //TUTTA LA ROBA QUI COMMENTATA NON CI SERVE PERCHé LA LOGICA L'ABBIAMO NELLA GAME SCENE MA ALCUNE COSE LE HO RICHIAMATE QUINDI DOVREBBERO RESTARE SE NON TROVIAMO IL MODO DI PULIRE IL CODICE
-    
-    
+
     static let shared: LastDroidGameLogic = LastDroidGameLogic()
     @Published var currentGameState: GameState = .playing
 
     
     func setUpGame() {
-        
-        // TODO: Customize!
-        
         self.currentScore = 0
-//        self.sessionDuration = 0
         self.isGameOver = false
     }
     
-    // Keeps track of the current score of the player
+    // Keeps track of the current score to save the var score and pass it in the model
     @Published var currentScore: Int = 0
     
-  
-    
     func restartGame() {
-        
-        // TODO: Customize!
-        
         self.setUpGame()
     }
     

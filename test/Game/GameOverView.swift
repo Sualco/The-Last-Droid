@@ -15,7 +15,9 @@ import SwiftData
 
 struct GameOverView: View {
     @Binding var currentGameState: GameState
-    @FocusState private var nameIsFocused: Bool
+    
+    @FocusState private var christianIsFocused: Bool
+    
     @Environment(\.modelContext) private var context
     @Query(sort: \Partita.playedAt, order: .reverse) var allPartiteSalvate: [Partita]
     var gameLogic: LastDroidGameLogic = LastDroidGameLogic.shared
@@ -45,9 +47,8 @@ struct GameOverView: View {
                 
                 
                 TextField(
-                    "Insert your name",
-                    text: $christian)
-                .focused($nameIsFocused)
+                    "Insert your name", text: $christian)
+                .focused($christianIsFocused)
                 .onChange(of: christian) {
                     newValue in
                     if christian.count > characterLimit {
@@ -61,7 +62,7 @@ struct GameOverView: View {
                 
                 Button("Save") {
                           saveName()
-                        nameIsFocused = true
+                        christianIsFocused = false
                            }
                 .foregroundStyle(.yellow)
                 .font(.custom("PressStart2P", size: 20))
@@ -133,18 +134,6 @@ struct GameOverView: View {
         self.currentGameState = .playing
     }
     
-//  @State private var savingScore = LastDroidGameScene()
-//    private func saveScore() {
-//          if !name.isEmpty {
-//              var playerNames = UserDefaults.standard.stringArray(forKey: "playerNames") ?? []
-//              playerNames.append(name)
-//              UserDefaults.standard.set(playerNames, forKey: "playerNames")
-//              name = ""
-//              print("Name saved")
-//          }
-//      }
-//
-//
 }
 
 #Preview {

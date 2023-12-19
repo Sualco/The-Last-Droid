@@ -24,8 +24,8 @@ struct OnboardingView: View {
                 VStack {
                     HStack {
                         
-                        Text("Slide to Move")
-                            .font(.custom("PressStart2P", size: 20))
+                        Text("SLIDE TO MOVE")
+                            .font(.custom("PressStart2P", size: 18))
                             .foregroundStyle(.yellow)
                     }
                     .padding()
@@ -40,13 +40,12 @@ struct OnboardingView: View {
                 VStack {
                     HStack {
                         
-                        Text("Destroy Droids")
-                            .font(.custom("PressStart2P", size: 20))
-                            
+                        Text("DESTROY DROIDS")
+                            .font(.custom("PressStart2P", size: 18))
                             .foregroundStyle(.yellow)
                     }
                     .padding()
-                    Text("Destroy droids and save the earth shooting them an apple").font(.custom("PressStart2P", size: 12))
+                    Text("Destroy the droids and save the earth shooting them an apple.").font(.custom("PressStart2P", size: 12))
                         .foregroundStyle(.yellow)
                         .lineSpacing(/*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
                         .padding()

@@ -29,13 +29,11 @@ struct LeaderboardView: View {
                     .scaledToFill()
                     .ignoresSafeArea()
                 
-//                Text ("Leaderboard")
-//                    .font(.custom("PressStart2P", size: 28))
-//                    .padding(.bottom,560)
-//
+                
                 VStack{
                     Text ("Leaderboard")
                         .font(.custom("PressStart2P", size: 25))
+                        .foregroundStyle(.black)
                         .padding()
                     
                     Spacer ()
